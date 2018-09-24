@@ -232,13 +232,4 @@ namespace eShop.Loader
         }
     }
 
-
-    public class UnitOfWork : IDisposable
-    {
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
 }
