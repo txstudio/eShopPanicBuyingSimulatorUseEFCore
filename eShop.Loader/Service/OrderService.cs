@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -23,11 +24,12 @@ namespace eShop.Loader
 
                 _products = _productInstance.GetProductList();
 
-                foreach (var item in _products)
+                foreach (var item in items)
                 {
-                    _storage = _productInstance.GetProductStorageById(item.No);
+                    _storage = _productInstance.GetProductStorageById(item.ProductNo);
+                    _storage.Storage = Convert.ToInt16(_storage.Storage.Value - item.Quantity.Value);
 
-                    if (_storage.Storage > 0)
+                    if (_storage.Storage >= 0)
                         _hasStorage = true;
 
                     if (_hasStorage == true)

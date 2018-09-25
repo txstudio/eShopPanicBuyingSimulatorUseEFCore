@@ -18,8 +18,7 @@ namespace eShop.Loader
 
         static void Main(string[] args)
         {
-            //設定 task 數量為 5 個
-            _option.TaskNumber = "5";
+            args = new string[] { "-t", "100" };
 
             SetArgs(_option, args);
 
@@ -69,89 +68,70 @@ namespace eShop.Loader
             Console.ReadKey();
         }
 
-
         static void eShopBuyer()
         {
-            var _memberGUID = Guid.NewGuid();
+            bool _hasStorage;
+            short _quantity;
+            int _maxValue;
+            int _productIndex;
 
-            using (eShopContext _db = new eShopContext())
+            Random _random;
+            Guid _memberGUID;
+            List<OrderDetail> _items;
+
+            _hasStorage = false;
+            _random = new Random();
+
+            while (true)
             {
-                eShopRepository _eShop = new eShopRepository(_db);
+                ProductService _productService;
+                OrderService _orderService;
 
-                var _products = _eShop.GetProducts().ToList();
+                _productService = new ProductService();
+                _orderService = new OrderService();
 
-                bool _orderResult;
-                short _quantity;
-                int _maxValue;
-                int _productIndex;
-                int _validStorage;
+                _memberGUID = Guid.NewGuid();
+                _hasStorage = false;
 
-                ProductMain _product;
-                List<OrderDetail> _items;
-                StringBuilder _builder;
+                var _products = _productService.GetProductList();
+                
 
-                _builder = new StringBuilder();
-
-                while(true)
+                //判斷所有商品是否都有庫存
+                foreach (var _item in _products)
                 {
-                    _quantity = Convert.ToInt16(_random.Next(1, 3));
-                    _maxValue = _products.Count();
-                    _productIndex = _random.Next(0, _maxValue);
+                    var _storage = _productService.GetStorage(_item.Schema);
 
-                    _product = _products[_productIndex];
-
-                    _validStorage = _eShop.GetProductValidStorage(_products[0].Schema);
-                                       
-                    //如果所有商品都沒有庫存的話取消訂購
-                    if (_validStorage <= 0)
+                    if(_storage > 0)
                     {
-                        _validStorage = _eShop.GetProductValidStorage(_products[1].Schema);
-
-                        if (_validStorage <= 0)
-                        {
-                            _validStorage = _eShop.GetProductValidStorage(_products[2].Schema);
-
-                            if (_validStorage <= 0)
-                            {
-                                _builder.Clear();
-                                _builder.AppendFormat("會員 {0} 完成作業", _memberGUID);
-
-                                //_eShop.AddEventBuying(_memberGUID, _builder.ToString(), true);
-
-                                Console.WriteLine(_builder.ToString());
-                                break;
-                            }
-                        }
+                        _hasStorage = true;
+                        break;
                     }
-
-                    _items = new List<OrderDetail>();
-                    _items.Add(new OrderDetail()
-                    {
-                        ProductNo = _product.No,
-                        Quantity = _quantity,
-                        SellPrice = _product.SellPrice
-                    });
-
-                    _orderResult = _eShop.AddOrder(_memberGUID, _items);
-
-                    //訂購商品
-                    _builder.Clear();
-                    _builder.AppendFormat("會員 {0} 訂購商品 {1} {2} 個，訂購 "
-                                            , _memberGUID
-                                            , _product.Name
-                                            , _quantity);
-
-                    if (_orderResult == true)
-                        _builder.Append("成功 ...");
-                    else
-                        _builder.Append("失敗 ...");
-
-                    //_eShop.AddEventBuying(_memberGUID, _builder.ToString(), _orderResult);
-                    Console.WriteLine(_builder.ToString());
                 }
-            }
-        }
 
+                if (_hasStorage == false)
+                    break;
+
+
+                //隨機取得要購買的商品編號
+                _quantity = Convert.ToInt16(_random.Next(1, 3));
+                _maxValue = _products.Count();
+                _productIndex = _random.Next(0, _maxValue);
+
+                var _product = _products.ToArray()[_productIndex];
+                               
+                _items = new List<OrderDetail>();
+                _items.Add(new OrderDetail()
+                {
+                    ProductNo = _product.No,
+                    Quantity = _quantity,
+                    SellPrice = _product.SellPrice
+                });
+
+                var _OrderResult = _orderService.AddOrder(_memberGUID, _items);
+            }
+
+            //執行完畢
+        }
 
         static void InitDatabase()
         {
@@ -166,6 +146,7 @@ namespace eShop.Loader
 
                 _db.Database.EnsureCreated();
 
+                Console.WriteLine();
                 Console.WriteLine("資料庫初始化完成 !");
                 Console.WriteLine();
 

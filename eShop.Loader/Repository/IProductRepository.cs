@@ -6,6 +6,8 @@ namespace eShop.Loader
     {
         IEnumerable<ProductMain> GetProductList();
 
+        ProductMain GetProductById(int ProductNo);
+
         ProductMain GetProductBySchema(string schema);
 
         IEnumerable<ProductStorage> GetProductStorageList();

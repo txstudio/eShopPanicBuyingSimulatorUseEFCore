@@ -19,6 +19,11 @@ namespace eShop.Loader
             return this._context.ProductMains.ToList();
         }
 
+        public ProductMain GetProductById(int ProductNo)
+        {
+            return this._context.ProductMains.Find(ProductNo);
+        }
+
         public ProductMain GetProductBySchema(string schema)
         {
             return this._context.ProductMains
@@ -56,6 +61,5 @@ namespace eShop.Loader
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }
-
     }
 }

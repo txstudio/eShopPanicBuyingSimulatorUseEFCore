@@ -41,7 +41,7 @@ namespace eShop.Loader
                 entity.HasKey(x => x.ProductNo);
 
                 entity.Property(x => x.ProductNo).HasColumnName("ProductNo").HasColumnType("int");
-                entity.Property(x => x.Storage).HasColumnName("Storage").HasColumnType("smallint");
+                entity.Property(x => x.Storage).HasColumnName("Storage").HasColumnType("smallint").IsConcurrencyToken();
             });
 
             #endregion
