@@ -10,6 +10,7 @@ namespace eShop.Loader
 
         private IOrderRepository _orderRepository;
         private IProductRepository _productRepository;
+        private IEventLogRepository _eventLogRepository;
 
         public UnitOfWork()
         {
@@ -35,6 +36,17 @@ namespace eShop.Loader
                     this._productRepository = new ProductRepository(this._context);
 
                 return this._productRepository;
+            }
+        }
+
+        public IEventLogRepository EventLogRepository
+        {
+            get
+            {
+                if (this._eventLogRepository == null)
+                    this._eventLogRepository = new EventLogRepository(this._context);
+
+                return this._eventLogRepository;
             }
         }
 
