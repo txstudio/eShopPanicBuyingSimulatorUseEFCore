@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace eShop.Loader.Service
+namespace eShop.Loader
 {
     public sealed class ProductService : IProductService
     {
