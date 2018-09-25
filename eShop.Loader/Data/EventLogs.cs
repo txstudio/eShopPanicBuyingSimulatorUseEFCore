@@ -16,6 +16,7 @@ namespace eShop.Loader
         public short? OrginalStorage { get; set; }
         public short? Quantity { get; set; }
 
+        public int? Elapsed { get; set; }
         public bool? IsSuccess { get; set; }
         public string Exception { get; set; }
     }

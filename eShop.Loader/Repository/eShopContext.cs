@@ -12,6 +12,8 @@ namespace eShop.Loader
         public DbSet<OrderMain> OrderMains { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
+        public DbSet<EventLog> EventLogs { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_connectionString);
@@ -91,6 +93,29 @@ namespace eShop.Loader
                 entity.Property(x => x.ProductNo).HasColumnName("ProductNo").HasColumnType("int");
                 entity.Property(x => x.SellPrice).HasColumnName("SellPrice").HasColumnType("smallmoney");
                 entity.Property(x => x.Quantity).HasColumnName("Quantity").HasColumnType("smallint");
+            });
+
+            #endregion
+
+            #region Events
+
+            //Events.EventLogs
+            modelBuilder.Entity<EventLog>(entity => {
+                entity.ToTable("EventLogs", "Events");
+                entity.HasKey(x => x.No);
+
+                entity.Property(x => x.No).HasColumnName("No").HasColumnType("int").ValueGeneratedOnAdd();
+                entity.Property(x => x.EventDateTime).HasColumnName("EventDateTime").HasColumnType("datetimeoffset");
+
+                entity.Property(x => x.MemberGUID).HasColumnName("MemberGUID").HasColumnType("uniqueidentifier");
+                entity.Property(x => x.ProductSchema).HasColumnName("ProductSchema").HasColumnType("varchar(15)");
+                entity.Property(x => x.ProductName).HasColumnName("ProductName").HasColumnType("nvarchar(50)");
+                entity.Property(x => x.OrginalStorage).HasColumnName("OrginalStorage").HasColumnType("smallint");
+                entity.Property(x => x.Quantity).HasColumnName("Quantity").HasColumnType("smallint");
+
+                entity.Property(x => x.Elapsed).HasColumnName("Elapsed").HasColumnType("int");
+                entity.Property(x => x.IsSuccess).HasColumnName("IsSuccess").HasColumnType("bit");
+                entity.Property(x => x.Exception).HasColumnName("Exception").HasColumnType("nvarchar(500)");
             });
 
             #endregion
