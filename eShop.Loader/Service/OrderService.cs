@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace eShop.Loader
 {
@@ -18,15 +19,32 @@ namespace eShop.Loader
             bool _AddOrderResult = false;
             bool _hasStorage = false;
 
+            var _log = new EventLog();
             var _productInstance = this._unitOfWork.ProductRepository;
             var _orderInstance = this._unitOfWork.OrderRepository;
+            var _stopwatch = new Stopwatch();
+
+            _log.MemberGUID = memberGUID;
+            _log.Retry = 0;
+            _log.EventDateTime = DateTime.Now;
 
             //判斷商品庫存：沒有庫存的話就不進行新增訂單
             ProductStorage _productStorage;
+            ProductMain _productMain;
+
+            _stopwatch.Reset();
+            _stopwatch.Start();
 
             foreach (var item in items)
             {
                 _productStorage = _productInstance.GetProductStorageById(item.ProductNo);
+                _productMain = _productInstance.GetProductById(item.ProductNo);
+
+                _log.ProductName = _productMain.Name;
+                _log.ProductSchema = _productMain.Schema;
+                _log.Quantity = item.Quantity;
+                _log.OrginalStorage = _productStorage.Storage;
+
                 _productStorage.Storage = Convert.ToInt16(_productStorage.Storage.Value - item.Quantity.Value);
 
                 if (_productStorage.Storage >= 0)
@@ -81,6 +99,8 @@ namespace eShop.Loader
             {
                 try
                 {
+                    _log.Retry = (_log.Retry + 1);
+
                     this._unitOfWork.Save();
 
                     _IsSaveOK = true;
@@ -156,6 +176,18 @@ namespace eShop.Loader
 
                     break;
                 }
+            }
+
+            _stopwatch.Stop();
+
+            _log.Elapsed = Convert.ToInt32(_stopwatch.ElapsedMilliseconds);
+            _log.IsSuccess = _AddOrderResult;
+
+            //儲存事件紀錄
+            using (UnitOfWork _work = new UnitOfWork())
+            {
+                _work.EventLogRepository.InsertEventLog(_log);
+                _work.Save();
             }
 
             return _AddOrderResult;

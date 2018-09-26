@@ -18,6 +18,8 @@ namespace eShop.Loader
 
         public int? Elapsed { get; set; }
         public bool? IsSuccess { get; set; }
+
         public string Exception { get; set; }
+        public int? Retry { get; set; }
     }
 }

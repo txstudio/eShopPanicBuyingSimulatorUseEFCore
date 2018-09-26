@@ -115,7 +115,9 @@ namespace eShop.Loader
 
                 entity.Property(x => x.Elapsed).HasColumnName("Elapsed").HasColumnType("int");
                 entity.Property(x => x.IsSuccess).HasColumnName("IsSuccess").HasColumnType("bit");
+
                 entity.Property(x => x.Exception).HasColumnName("Exception").HasColumnType("nvarchar(500)");
+                entity.Property(x => x.Retry).HasColumnName("Retry").HasColumnType("int");
             });
 
             #endregion
