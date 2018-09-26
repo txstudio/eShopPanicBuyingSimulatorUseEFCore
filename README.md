@@ -24,6 +24,10 @@ docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Pa$$w0rd' -p 1433:1433 -d
 
 > 在資料夾中找不到初始化資料庫的 Transact-SQL 檔案是正常的
 
+## 已知問題
+
+新增訂單時會發現有些訂單並沒有建立成功，在訂單資料表中會看到有些訂單編號並沒有儲存到資料表
+
 ## 參考資料
 - [Concurrency Tokens - EF Core | Microsoft Docs](https://docs.microsoft.com/en-us/ef/core/modeling/concurrency)
 - [Advanced Entity Framework Scenarios for an MVC Web Application (10 of 10) - No-Tracking Queries](https://docs.microsoft.com/en-us/aspnet/mvc/overview/older-versions/getting-started-with-ef-5-using-mvc-4/advanced-entity-framework-scenarios-for-an-mvc-web-application#no-tracking-queries)
