@@ -11,6 +11,7 @@ namespace eShop.Loader
         public Nullable<Guid> MemberGUID { get; set; }
         public bool? IsDeleted { get; set; }
 
+        //修改型別為 ICollection 確認是否可以接受
         public List<OrderDetail> OrderDetails { get; set; }
     }
 }
