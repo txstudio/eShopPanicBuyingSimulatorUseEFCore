@@ -174,9 +174,7 @@ namespace eShop.Loader
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.GetType().Name);
-
-                    throw ex;
-
+                    
                     break;
                 }
             }
