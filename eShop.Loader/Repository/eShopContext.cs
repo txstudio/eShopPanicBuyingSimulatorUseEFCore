@@ -71,7 +71,7 @@ namespace eShop.Loader
                 entity.HasKey(x => x.No);
                 entity.HasIndex(x => x.Schema).IsUnique();
 
-                entity.Property(x => x.No).HasColumnName("No").HasColumnType("int").ValueGeneratedNever();
+                entity.Property(x => x.No).HasColumnName("No").HasColumnType("int").ValueGeneratedOnAdd();
                 entity.Property(x => x.Schema).HasColumnName("Schema").HasColumnType("char(15)");
                 entity.Property(x => x.OrderDate).HasColumnName("OrderDate").HasColumnType("datetimeoffset");
                 entity.Property(x => x.MemberGUID).HasColumnName("MemberGUID").HasColumnType("uniqueidentifier");

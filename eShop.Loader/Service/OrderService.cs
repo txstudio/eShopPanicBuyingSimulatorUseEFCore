@@ -72,24 +72,25 @@ namespace eShop.Loader
             OrderDetail _orderDetail;
 
             _orderMain = new OrderMain();
-            _orderMain.No = _mainSeq;
+            //_orderMain.No = _mainSeq;
             _orderMain.Schema = _orderSchema;
             _orderMain.OrderDate = DateTime.Now;
             _orderMain.MemberGUID = memberGUID;
             _orderMain.IsDeleted = false;
-
-            this._unitOfWork.OrderRepository.InsertOrderMain(_orderMain);
+            _orderMain.OrderDetails = new List<OrderDetail>();
 
             foreach (var item in items)
             {
                 _orderDetail = new OrderDetail();
-                _orderDetail.OrderNo = _mainSeq;
+                //_orderDetail.OrderNo = _mainSeq;
                 _orderDetail.ProductNo = item.ProductNo;
                 _orderDetail.SellPrice = item.SellPrice;
                 _orderDetail.Quantity = item.Quantity;
 
-                this._unitOfWork.OrderRepository.InsertOrderDetail(_orderDetail);
+                _orderMain.OrderDetails.Add(_orderDetail);
             }
+
+            this._unitOfWork.OrderRepository.InsertOrderMain(_orderMain);
 
             /*
              * 此區塊程式碼參考至下列 Github
@@ -173,6 +174,8 @@ namespace eShop.Loader
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.GetType().Name);
+
+                    throw ex;
 
                     break;
                 }
