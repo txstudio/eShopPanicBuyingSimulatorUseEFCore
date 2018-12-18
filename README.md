@@ -30,7 +30,7 @@ docker run --name demo-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -d mys
 
 使用 Entity Framework Core 進行資料庫存取，並透過 Code First 的方式建立與初始化資料表物件
 
-> 在資料夾中找不到初始化資料庫的 Transact-SQL 檔案是正常的
+> 在資料夾中找不到初始化資料庫的 *.sql 檔案是正常的
 
 ## 已知問題
 
