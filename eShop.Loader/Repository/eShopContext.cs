@@ -4,6 +4,7 @@ namespace eShop.Loader
 {
     public class eShopContext : DbContext
     {
+        //請自行變更資料庫連線字串
         private readonly string _connectionString = "server=192.168.0.80;database=eShopInMySQL;user=root;password=password";
 
         public DbSet<ProductMain> ProductMains { get; set; }
