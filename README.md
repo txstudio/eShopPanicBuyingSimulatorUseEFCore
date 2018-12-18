@@ -20,10 +20,10 @@
 
 ## 資料庫
 
-範例資料庫使用 Microsoft SQL Server in Docker 的 Image 建立，可以使用下列指令碼啟用 Container
+範例資料庫 docker 建立 MySQL 官方提供的最新 MySQL 資料庫 container，可以參考下列指令進行建立
 
 ```
-docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Pa$$w0rd' -p 1433:1433 -d
+docker run --name demo-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -d mysql
 ```
 
 ## .NET Core 應用程式
