@@ -6,7 +6,11 @@ namespace eShop.Loader
 {
     internal class LoaderOptions
     {
+<<<<<<< HEAD
         private readonly DateTime _executeTime;
+=======
+        private DateTime _executeTime;
+>>>>>>> master
 
         public LoaderOptions()
         {
