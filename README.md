@@ -10,6 +10,14 @@
 > 本範例程式碼有一個對應的 Stored Procedure 版本，並使用 ADO.NET 進行資料存取
 > [txstudio/eShopPanicBuyingSimulatorUseStoreProcedure](https://github.com/txstudio/eShopPanicBuyingSimulatorUseStoreProcedure)
 
+## 分支說明
+
+|名稱|說明|
+|--|--|
+|[master](https://github.com/txstudio/eShopPanicBuyingSimulatorUseEFCore)|主要分支訂單代碼與資料序號使用 Sequence 產生，資料庫使用 MS-SQL|
+|[order-no-use-identity](https://github.com/txstudio/eShopPanicBuyingSimulatorUseEFCore/tree/order-no-use-identity)|使用 MS-SQL IDENTITY 產生序號的範例|
+|[use-mysql](https://github.com/txstudio/eShopPanicBuyingSimulatorUseEFCore/tree/use-mysql)|資料庫改使用 MySQL|
+
 ## 資料庫
 
 範例資料庫使用 Microsoft SQL Server in Docker 的 Image 建立，可以使用下列指令碼啟用 Container
