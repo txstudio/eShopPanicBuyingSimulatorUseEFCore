@@ -4,7 +4,7 @@ namespace eShop.Loader
 {
     public class eShopContext : DbContext
     {
-        private readonly string _connectionString = "Server=192.168.0.80;Database=eShopUseEFCore;User Id=sa;Password=Pa$$w0rd;";
+        private readonly string _connectionString = "server=192.168.0.80;database=eShopInMySQL;user=root;password=password";
 
         public DbSet<ProductMain> ProductMains { get; set; }
         public DbSet<ProductStorage> ProductStorages { get; set; }
@@ -16,7 +16,7 @@ namespace eShop.Loader
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_connectionString);
+            optionsBuilder.UseMySQL(_connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace eShop.Loader
 
             //Products.ProductMains
             modelBuilder.Entity<ProductMain>(entity => {
-                entity.ToTable("ProductMains", "Products");
+                entity.ToTable("ProductMains");
                 entity.HasKey(x => x.No);
                 entity.HasOne(x => x.ProductStorage)
                         .WithOne(x => x.ProductMain)
@@ -33,13 +33,13 @@ namespace eShop.Loader
 
                 entity.Property(x => x.No).HasColumnName("No").HasColumnType("int");
                 entity.Property(x => x.Schema).HasColumnName("Schema").HasColumnType("varchar(15)");
-                entity.Property(x => x.Name).HasColumnName("Name").HasColumnType("nvarchar(50)");
-                entity.Property(x => x.SellPrice).HasColumnName("SellPrice").HasColumnType("smallmoney");
+                entity.Property(x => x.Name).HasColumnName("Name").HasColumnType("varchar(50)");
+                entity.Property(x => x.SellPrice).HasColumnName("SellPrice").HasColumnType("decimal");
             });
 
             //Products.ProductStorages
             modelBuilder.Entity<ProductStorage>(entity => {
-                entity.ToTable("ProductStorages", "Products");
+                entity.ToTable("ProductStorages");
                 entity.HasKey(x => x.ProductNo);
 
                 entity.Property(x => x.ProductNo).HasColumnName("ProductNo").HasColumnType("int");
@@ -54,33 +54,23 @@ namespace eShop.Loader
 
             #region Orders
 
-            //Orders.OrderMainSeq
-            modelBuilder.HasSequence<int>("OrderMainSeq", schema: "Orders")
-                        .StartsAt(1)
-                        .IncrementsBy(1);
-
-            //Orders.OrderSchemaSeq
-            modelBuilder.HasSequence<int>("OrderSchemaSeq", schema: "Orders")
-                        .StartsAt(1)
-                        .IncrementsBy(1);
-
             //Orders.OrderMains
             modelBuilder.Entity<OrderMain>(entity =>
             {
-                entity.ToTable("OrderMains", "Orders");
+                entity.ToTable("OrderMains");
                 entity.HasKey(x => x.No);
                 entity.HasIndex(x => x.Schema).IsUnique();
 
-                entity.Property(x => x.No).HasColumnName("No").HasColumnType("int").ValueGeneratedNever();
-                entity.Property(x => x.Schema).HasColumnName("Schema").HasColumnType("char(15)");
-                entity.Property(x => x.OrderDate).HasColumnName("OrderDate").HasColumnType("datetimeoffset");
-                entity.Property(x => x.MemberGUID).HasColumnName("MemberGUID").HasColumnType("uniqueidentifier");
+                entity.Property(x => x.No).HasColumnName("No").HasColumnType("int").ValueGeneratedOnAdd();
+                entity.Property(x => x.Schema).HasColumnName("Schema").HasColumnType("char(36)");
+                entity.Property(x => x.OrderDate).HasColumnName("OrderDate").HasColumnType("timestamp");
+                entity.Property(x => x.MemberGUID).HasColumnName("MemberGUID").HasColumnType("char(36)");
                 entity.Property(x => x.IsDeleted).HasColumnName("IsDeleted").HasColumnType("bit");
             });
 
             //Orders.OrderDetails
             modelBuilder.Entity<OrderDetail>(entity => {
-                entity.ToTable("OrderDetails", "Orders");
+                entity.ToTable("OrderDetails");
                 entity.HasKey(x => new { x.OrderNo, x.ProductNo });
                 entity.HasOne(x => x.OrderMain)
                         .WithMany(x => x.OrderDetails)
@@ -91,7 +81,7 @@ namespace eShop.Loader
 
                 entity.Property(x => x.OrderNo).HasColumnName("OrderNo").HasColumnType("int");
                 entity.Property(x => x.ProductNo).HasColumnName("ProductNo").HasColumnType("int");
-                entity.Property(x => x.SellPrice).HasColumnName("SellPrice").HasColumnType("smallmoney");
+                entity.Property(x => x.SellPrice).HasColumnName("SellPrice").HasColumnType("decimal");
                 entity.Property(x => x.Quantity).HasColumnName("Quantity").HasColumnType("smallint");
             });
 
@@ -101,22 +91,22 @@ namespace eShop.Loader
 
             //Events.EventLogs
             modelBuilder.Entity<EventLog>(entity => {
-                entity.ToTable("EventLogs", "Events");
+                entity.ToTable("EventLogs");
                 entity.HasKey(x => x.No);
 
                 entity.Property(x => x.No).HasColumnName("No").HasColumnType("int").ValueGeneratedOnAdd();
-                entity.Property(x => x.EventDateTime).HasColumnName("EventDateTime").HasColumnType("datetimeoffset");
+                entity.Property(x => x.EventDateTime).HasColumnName("EventDateTime").HasColumnType("timestamp");
 
-                entity.Property(x => x.MemberGUID).HasColumnName("MemberGUID").HasColumnType("uniqueidentifier");
+                entity.Property(x => x.MemberGUID).HasColumnName("MemberGUID").HasColumnType("char(36)");
                 entity.Property(x => x.ProductSchema).HasColumnName("ProductSchema").HasColumnType("varchar(15)");
-                entity.Property(x => x.ProductName).HasColumnName("ProductName").HasColumnType("nvarchar(50)");
+                entity.Property(x => x.ProductName).HasColumnName("ProductName").HasColumnType("varchar(50)");
                 entity.Property(x => x.OrginalStorage).HasColumnName("OrginalStorage").HasColumnType("smallint");
                 entity.Property(x => x.Quantity).HasColumnName("Quantity").HasColumnType("smallint");
 
                 entity.Property(x => x.Elapsed).HasColumnName("Elapsed").HasColumnType("int");
                 entity.Property(x => x.IsSuccess).HasColumnName("IsSuccess").HasColumnType("bit");
 
-                entity.Property(x => x.Exception).HasColumnName("Exception").HasColumnType("nvarchar(500)");
+                entity.Property(x => x.Exception).HasColumnName("Exception").HasColumnType("varchar(500)");
                 entity.Property(x => x.Retry).HasColumnName("Retry").HasColumnType("int");
             });
 

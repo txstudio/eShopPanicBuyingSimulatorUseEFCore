@@ -56,40 +56,29 @@ namespace eShop.Loader
 
             if (_hasStorage == false)
                 return false;
-
-            //取得訂單序號與訂單編號
-            int _mainSeq, _schemaSeq;
-            string _orderSchema;
-
-            _mainSeq = _orderInstance.GetOrderMainSeq();
-            _schemaSeq = _orderInstance.GetOrderSchemaSeq();
-
-            _orderSchema = String.Format("{0:yyyyMMdd}{1,7}", DateTime.Now, _schemaSeq);
-            _orderSchema = _orderSchema.Replace(" ", "0");
-
+            
             //建立訂單
             OrderMain _orderMain;
             OrderDetail _orderDetail;
 
             _orderMain = new OrderMain();
-            _orderMain.No = _mainSeq;
-            _orderMain.Schema = _orderSchema;
+            _orderMain.Schema = Guid.NewGuid().ToString();
             _orderMain.OrderDate = DateTime.Now;
             _orderMain.MemberGUID = memberGUID;
             _orderMain.IsDeleted = false;
-
-            this._unitOfWork.OrderRepository.InsertOrderMain(_orderMain);
+            _orderMain.OrderDetails = new List<OrderDetail>();
 
             foreach (var item in items)
             {
                 _orderDetail = new OrderDetail();
-                _orderDetail.OrderNo = _mainSeq;
                 _orderDetail.ProductNo = item.ProductNo;
                 _orderDetail.SellPrice = item.SellPrice;
                 _orderDetail.Quantity = item.Quantity;
 
-                this._unitOfWork.OrderRepository.InsertOrderDetail(_orderDetail);
+                _orderMain.OrderDetails.Add(_orderDetail);
             }
+
+            this._unitOfWork.OrderRepository.InsertOrderMain(_orderMain);
 
             /*
              * 此區塊程式碼參考至下列 Github

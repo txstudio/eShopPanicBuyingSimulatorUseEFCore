@@ -8,9 +8,5 @@ namespace eShop.Loader
         void InsertOrderMain(OrderMain orderMain);
 
         void InsertOrderDetail(OrderDetail orderDetail);
-
-        int GetOrderMainSeq();
-
-        int GetOrderSchemaSeq();
     }
 }
