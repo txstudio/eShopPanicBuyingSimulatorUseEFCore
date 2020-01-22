@@ -44,10 +44,10 @@ namespace eShop.Loader
 
                 entity.Property(x => x.ProductNo).HasColumnName("ProductNo").HasColumnType("int");
 
-                //entity.Property(x => x.Storage).HasColumnName("Storage").HasColumnType("smallint");
+                entity.Property(x => x.Storage).HasColumnName("Storage").HasColumnType("smallint");
 
                 //加入 IsConcurrencyToken 確保資料的一致性 (不會超賣)
-                entity.Property(x => x.Storage).HasColumnName("Storage").HasColumnType("smallint").IsConcurrencyToken();
+                //entity.Property(x => x.Storage).HasColumnName("Storage").HasColumnType("smallint").IsConcurrencyToken();
             });
 
             #endregion
